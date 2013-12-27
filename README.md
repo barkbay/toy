@@ -7,7 +7,7 @@ What is it ?
 I wanted to learn myself how YARN works, as an exercise I decided to try to deploy JEE
 web application (a.k.a. WAR files) inside YARN containers.
 
-TOY is just a proof of concept did on my spare time, it is definitely not a
+TOY is just a proof of concept, I did it on my spare time, it is definitely not a
 reference for implementing YARN applications.
 If you want to to do so I suggest you to have a look at [Apache Twill](http://twill.incubator.apache.org/) project.
 
@@ -17,11 +17,11 @@ Requirements
 You need :
 - Hadoop 2.2.X :)
 - Zookeeper 3.X.X : Zookeeper is used to control WAR deployment lifecycle (add / stop containers) and as a service directory
-- Tomcat 7.0.X on you local workstation, required libraries will be automatically pushed to your Hadoop cluster from here
+- Tomcat 7.0.X on your **local** workstation, required libraries will be automatically pushed to your Hadoop cluster from here
 
 You need to check that the following env variables are set :
 - **HADOOP_CONF_DIR** : your Hadoop configuration directory
-- **HADOOP_YARN_HOME** : must point to the bin/yarn script
+- **HADOOP_YARN_HOME** : used to find the bin/yarn script
 
 
 Build TOY
