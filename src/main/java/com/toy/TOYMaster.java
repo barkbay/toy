@@ -151,6 +151,9 @@ public class TOYMaster implements QueueConsumer<Integer>
             LOG.error("Error while closing Zookeeper connection", e);
         }
 
+        // Clean HDFS
+        clean();
+
         // Let say that everyting is ok
         amRMClient.unregisterApplicationMaster(FinalApplicationStatus.SUCCEEDED, "All done", null);
 
@@ -167,15 +170,12 @@ public class TOYMaster implements QueueConsumer<Integer>
     {
         // TODO : clean HDFS !
         Path pathSuffix = new Path(System.getenv().get(Constants.TOMCAT_LIBS));
+        LOG.info("Clean directory {}", pathSuffix);
         try
         {
-            final RemoteIterator<LocatedFileStatus> locatedFileStatusRemoteIterator = fs.listFiles(pathSuffix, false);
-            while (locatedFileStatusRemoteIterator.hasNext())
-            {
-                final LocatedFileStatus next = locatedFileStatusRemoteIterator.next();
-                LOG.info("Remove {}", next.getPath().toString());
-                fs.delete(pathSuffix, false);
-            }
+            // Sanity check before calling delete(..)
+            if ("toy".equals(pathSuffix.getParent().getName()))
+                fs.delete(pathSuffix, true);
         } catch (IOException e)
         {
             LOG.error("Error while cleaning HDFS directory {}", pathSuffix, e);

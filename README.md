@@ -9,7 +9,7 @@ as an exercise I decided to try to deploy JEE web application (a.k.a. WAR files)
 
 TOY is just a proof of concept, I did it on my spare time, it is definitely not a
 reference for implementing YARN applications.
-If you want to to do so I suggest you to have a look at [Apache Twill](http://twill.incubator.apache.org/) project.
+If you want to do so I suggest you to have a look at [Apache Twill](http://twill.incubator.apache.org/) project.
 
 Requirements
 ------------
@@ -43,7 +43,7 @@ How to deploy a WAR
 Retrieve hosts and ports
 ------------------------
 
-Tomcat is started on random hosts and ports, use the following command to know which one is used :
+Tomcat is started on random hosts and ports, use the following command to know which one are used :
 
 ```
 ./toy.sh -status -zookeeper <zk hosts>

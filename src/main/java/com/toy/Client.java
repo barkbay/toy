@@ -353,9 +353,8 @@ public class Client
         LOG.info("Submitting TOY application {} to ASM", appId.toString());
         yarn.submitApplication(appContext);
 
-        // Monitor the application
+        // Monitor the application and exit if it is RUNNING
         monitorApplication(appId);
-        LOG.info("Client exited");
     }
 
     private static void registerLocalResource(Map<String, LocalResource> localResources, ApplicationId appId, FileSystem fs, Path src) throws IOException
@@ -402,10 +401,10 @@ public class Client
         while (true)
         {
 
-            // Check app status every 10 second.
+            // Check app status every second.
             try
             {
-                Thread.sleep(10000);
+                Thread.sleep(1000);
             } catch (InterruptedException e)
             {
                 LOG.debug("Thread sleep in monitoring loop interrupted");
@@ -423,27 +422,24 @@ public class Client
                     + ", appUser=" + report.getUser());
 
             YarnApplicationState state = report.getYarnApplicationState();
-            FinalApplicationStatus dsStatus = report.getFinalApplicationStatus();
-            if (YarnApplicationState.FINISHED == state)
+            switch (state)
             {
-                if (FinalApplicationStatus.SUCCEEDED == dsStatus)
-                {
-                    LOG.info("Application has completed successfully. Breaking monitoring loop");
+                case RUNNING :
+                    LOG.info("TOY is running\n" +
+                            "To stop : ./toy.sh -stop -zookeeper {}\n" +
+                            "Get containers status : ./toy.sh -status -zookeeper {}",
+                            toyConfig.zookeeper, toyConfig.zookeeper);
                     return true;
-                } else
-                {
-                    LOG.info("Application did finished unsuccessfully."
-                            + " YarnState=" + state.toString() + ", DSFinalStatus=" + dsStatus.toString()
-                            + ". Breaking monitoring loop");
+                case FAILED:
+                case KILLED:
+                    LOG.error("Ooops something went wrong");
                     return false;
-                }
-            } else if (YarnApplicationState.KILLED == state
-                    || YarnApplicationState.FAILED == state)
-            {
-                LOG.info("Application did not finish."
-                        + " YarnState=" + state.toString() + ", DSFinalStatus=" + dsStatus.toString()
-                        + ". Breaking monitoring loop");
-                return false;
+                case FINISHED:
+                    LOG.info("YARN app has already finished");
+                    return false;
+                default:
+                    break;
+
             }
         }
     }
