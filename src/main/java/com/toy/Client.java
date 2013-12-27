@@ -93,6 +93,9 @@ public class Client
             case ADD:
                 client.add();
                 break;
+            case STOP:
+                client.stop();
+                break;
             default:
                 throw new NotImplementedException();
         }
@@ -134,10 +137,33 @@ public class Client
         final CuratorFramework zookeeper =
                 CuratorFrameworkFactory.newClient(toyConfig.zookeeper, new RetryOneTime(10000));
         zookeeper.start();
-        List<String> ns = null;
         try
         {
             InstancesManagement.status(zookeeper);
+        }
+        catch (KeeperException.NoNodeException e)
+        {
+            System.out.println(" * No service registered *");
+        }  finally
+        {
+            zookeeper.close();
+        }
+    }
+
+    /**
+     * Read and display on stdout the content of Zookeeper
+     *
+     * @throws Exception
+     */
+    void stop() throws Exception
+    {
+        System.out.println("Stop all instances");
+        final CuratorFramework zookeeper =
+                CuratorFrameworkFactory.newClient(toyConfig.zookeeper, new RetryOneTime(10000));
+        zookeeper.start();
+        try
+        {
+            InstancesManagement.stop(zookeeper);
         }
         catch (KeeperException.NoNodeException e)
         {

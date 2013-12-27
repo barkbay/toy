@@ -1,11 +1,11 @@
-T.O.Y. : Tomcat On YARN
+TOY : Tomcat On YARN
 =======================
 
 What is it ?
 ------------
 
-I wanted to learn myself how YARN works, as an exercise I decided to try to deploy JEE
-web application (a.k.a. WAR files) inside YARN containers.
+I wanted to learn myself how [YARN](https://hadoop.apache.org/docs/current2/hadoop-yarn/hadoop-yarn-site/YARN.html) works,
+as an exercise I decided to try to deploy JEE web application (a.k.a. WAR files) inside YARN containers.
 
 TOY is just a proof of concept, I did it on my spare time, it is definitely not a
 reference for implementing YARN applications.
@@ -78,4 +78,9 @@ Running the status command you should see a new instance :
   http://10.0.3.47:41520
 ```
 
+Stop containers
+---------------
 
+```
+./toy.sh -stop -zookeeper 10.0.3.1
+```

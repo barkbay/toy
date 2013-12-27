@@ -77,4 +77,10 @@ public class InstancesManagement
         queue.start();
         queue.put(count);
     }
+
+    public static void stop(CuratorFramework zookeeper)
+            throws Exception
+    {
+        zookeeper.delete().deletingChildrenIfNeeded().forPath(Constants.ZK_PREFIX);
+    }
 }

@@ -22,7 +22,7 @@ if [[ -x "$yarn" ]]
 then
     echo "yarn is @ $yarn"
 else
-    echo "File $yarn is not executable or found"
+    echo "File $yarn is not executable or not found"
     exit 1
 fi
 
